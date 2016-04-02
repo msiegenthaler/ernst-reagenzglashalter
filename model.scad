@@ -76,7 +76,11 @@ module 3d_body() {
 }
 
 module backplate() {
-  side();
+  difference() {
+    side();
+    translate([0, holder_y])
+      holder_spikes();
+  }
 }
 
 module frontplate() {
@@ -89,6 +93,8 @@ module frontplate() {
         translate([0,(height-viewport_height)/2])
           square([viewport_width,viewport_height]);
     };
+    translate([0, holder_y])
+      holder_spikes();
   }
 }
 
@@ -105,12 +111,31 @@ module topping() {
 
 module holder() {
   diameter = glas_diameter / 2;
-  difference() {
-    square([width, depth - 2*wood]);;
-    for (i=[0:glas_count-1]) {
-      translate([glas_inset+i*(glas_diameter+glas_gap),0])
-        translate([glas_diameter/2,depth/2-wood])
-          circle(d = diameter + glas_holding_gap);
+  union() {
+    difference() {
+      square([width, depth - 2*wood]);;
+      for (i=[0:glas_count-1]) {
+        translate([glas_inset+i*(glas_diameter+glas_gap),0])
+          translate([glas_diameter/2,depth/2-wood])
+            circle(d = diameter + glas_holding_gap);
+      }
+    };
+    translate([0, -wood])
+      holder_spikes();
+    translate([0, depth-2*wood])
+      holder_spikes();
+  }
+}
+
+module holder_spikes() {
+  union() {
+    square([wood, wood]);
+    translate([width-wood, 0])
+      square([wood, wood]);
+    for (i=[1:glas_count-1]) {
+      translate([-glas_gap/2-wood/2,0])
+        translate([glas_inset+i*(glas_diameter+glas_gap),0])
+          square([wood, wood]);
     }
   }
 }
