@@ -53,11 +53,11 @@ module lasercut() {
     backplate();
   translate([width+gap,0])
     frontplate();
-  translate([0,height+gap])
+  translate([0,height+2*wood+gap])
     bottom();
-  translate([width+gap,height+gap])
+  translate([width+gap,height+2*wood+gap])
     holder();
-  translate([0,height+depth+2*gap])
+  translate([0,height+2*wood+depth+2*gap])
     topping();
 }
 
@@ -106,7 +106,7 @@ module topping() {
 module holder() {
   diameter = glas_diameter / 2;
   difference() {
-    layer();
+    square([width, depth - 2*wood]);;
     for (i=[0:glas_count-1]) {
       translate([glas_inset+i*(glas_diameter+glas_gap),0])
         translate([glas_diameter/2,depth/2-wood])
@@ -120,9 +120,20 @@ module bottom() {
 }
 
 module layer() {
-  square([width, depth - 2*wood]);
+  union() {
+    square([width, depth - 2*wood]);
+    woodjoint(width, true, true, wood, wood);
+    translate([0, depth - wood])
+    woodjoint(width, true, true, wood, wood);
+  }
 }
 
 module side() {
-  square([width, height]);
+  union() {
+    translate([0,wood])
+      square([width, height-2*wood]);
+    woodjoint(width, false, false, wood, wood);
+    translate([0, height-wood])
+      woodjoint(width, false, false, wood, wood);
+  }
 }
