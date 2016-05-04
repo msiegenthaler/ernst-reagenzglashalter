@@ -46,6 +46,7 @@ glas_inset = 2 * wood;
 glas_spacing_z = 1.625 * wood;
 width = glas_count*glas_diameter + (glas_count-1)*glas_gap + glas_inset*2;
 depth = glas_spacing_z*2 + glas_diameter;
+viewport_width = glas_diameter;
 
 module lasercut() {
   gap = 2;
@@ -84,7 +85,6 @@ module backplate() {
 }
 
 module frontplate() {
-  viewport_width = glas_diameter;
   viewport_height = height - 4*wood;
   difference() {
     side();
@@ -123,8 +123,17 @@ module holder() {
     translate([0, -wood])
       holder_spikes();
     translate([0, depth-2*wood])
+      holder_window_fills();
+    translate([0, depth-2*wood])
       holder_spikes();
   }
+}
+
+module holder_window_fills() {
+    for (i=[0:glas_count-1]) {
+      translate([glas_inset+i*(glas_diameter+glas_gap),0])
+        #square([viewport_width, wood]);
+    }
 }
 
 module holder_spikes() {

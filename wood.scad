@@ -12,7 +12,7 @@ module woodjoint(length, mode, below, myMaterialThickness, otherMaterialThicknes
   tabheight = otherMaterialThickness;
   start = mode ? 0 : 1;
   translate([0,(below?-tabheight:0)]) for (i = [start:2:count-1]) {
-    translate([i*tabwidth,0]) square([tabwidth,tabheight]);
+    translate([i*tabwidth,0]) square([tabwidth,tabheight+0.01]);
   }
 }
 
